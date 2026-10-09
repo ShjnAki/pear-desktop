@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Pear</string>
+  <string name="settings">Réglages</string>
+  <string name="channel_name">Lecture</string>
+  <string name="nothing_playing">Rien en cours de lecture</string>
+  <string name="action_previous">Précédent</string>
+  <string name="action_play">Lecture</string>
+  <string name="action_pause">Pause</string>
+  <string name="action_next">Suivant</string>
+
+  <string name="pref_cat_playback">Lecture</string>
+  <string name="pref_background">Lecture en arrière-plan</string>
+  <string name="pref_background_sum">Continue la musique écran éteint ou application en fond, avec contrôles dans la notification.</string>
+  <string name="pref_cat_plugins">Plugins</string>
+  <string name="pref_adblock">Bloqueur de pubs</string>
+  <string name="pref_adblock_sum">Retire les pubs des réponses du lecteur et bloque les domaines publicitaires (équivalent du plugin « Do Not Track / adblocker »).</string>
+  <string name="pref_sponsorblock">SponsorBlock</string>
+  <string name="pref_sponsorblock_sum">Saute les passages non musicaux des clips (intros, sponsors…).</string>
+  <string name="pref_sb_categories">Catégories SponsorBlock</string>
+  <string name="pref_cat_display">Affichage</string>
+  <string name="pref_desktop">Version bureau</string>
+  <string name="pref_desktop_sum">Charge l\'interface desktop de YouTube Music au lieu de la version mobile.</string>
+  <string name="pref_reload">Recharger YouTube Music</string>
+</resources>

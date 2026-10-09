@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="pear_bg">#FF030303</color>
+  <color name="pear_accent">#FFC3E88D</color>
+
+  <style name="Theme.Pear" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <item name="android:windowBackground">@color/pear_bg</item>
+    <item name="colorPrimary">@color/pear_bg</item>
+    <item name="colorAccent">@color/pear_accent</item>
+    <item name="android:statusBarColor">@color/pear_bg</item>
+    <item name="android:navigationBarColor">@color/pear_bg</item>
+    <item name="android:windowLightStatusBar">false</item>
+  </style>
+
+  <style name="Theme.Pear.Settings" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <item name="colorAccent">@color/pear_accent</item>
+  </style>
+</resources>

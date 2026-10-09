@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+  <PreferenceCategory app:title="@string/pref_cat_playback" app:iconSpaceReserved="false">
+    <SwitchPreferenceCompat
+      app:key="background"
+      app:defaultValue="true"
+      app:iconSpaceReserved="false"
+      app:title="@string/pref_background"
+      app:summary="@string/pref_background_sum" />
+  </PreferenceCategory>
+
+  <PreferenceCategory app:title="@string/pref_cat_plugins" app:iconSpaceReserved="false">
+    <SwitchPreferenceCompat
+      app:key="adblock"
+      app:defaultValue="true"
+      app:iconSpaceReserved="false"
+      app:title="@string/pref_adblock"
+      app:summary="@string/pref_adblock_sum" />
+    <SwitchPreferenceCompat
+      app:key="sponsorblock"
+      app:defaultValue="true"
+      app:iconSpaceReserved="false"
+      app:title="@string/pref_sponsorblock"
+      app:summary="@string/pref_sponsorblock_sum" />
+    <MultiSelectListPreference
+      app:key="sb_categories"
+      app:dependency="sponsorblock"
+      app:iconSpaceReserved="false"
+      app:title="@string/pref_sb_categories"
+      app:entries="@array/sb_categories_labels"
+      app:entryValues="@array/sb_categories_values"
+      app:defaultValue="@array/sb_categories_values" />
+  </PreferenceCategory>
+
+  <PreferenceCategory app:title="@string/pref_cat_display" app:iconSpaceReserved="false">
+    <SwitchPreferenceCompat
+      app:key="desktop"
+      app:defaultValue="false"
+      app:iconSpaceReserved="false"
+      app:title="@string/pref_desktop"
+      app:summary="@string/pref_desktop_sum" />
+    <Preference
+      app:key="reload"
+      app:iconSpaceReserved="false"
+      app:title="@string/pref_reload" />
+  </PreferenceCategory>
+</PreferenceScreen>

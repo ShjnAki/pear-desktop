@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#030303" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Pear Remote</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Connection screen -->
+  <main class="connect" id="connect" hidden>
+    <img class="connect__logo" src="icons/icon.svg" alt="" width="96" height="96" />
+    <h1 class="connect__title">Pear Remote</h1>
+    <p class="connect__hint">
+      Active le plugin <strong>API Server</strong> dans Pear Desktop, puis connecte-toi.
+      Une fenêtre de confirmation s'affiche sur le PC à la première connexion.
+    </p>
+    <form class="connect__form" id="connect-form">
+      <label class="connect__label" for="server-url">Adresse du serveur</label>
+      <input class="connect__input" id="server-url" type="url" inputmode="url" autocomplete="url"
+             placeholder="https://remote.shinaki.cc" required />
+      <label class="connect__label" for="client-id">Nom de cet appareil</label>
+      <input class="connect__input" id="client-id" type="text" maxlength="40" required />
+      <button class="connect__connecter-cta" type="submit">Se connecter</button>
+      <p class="connect__error" id="connect-error" role="alert"></p>
+    </form>
+    <a class="connect__apk-link" href="pear-mobile.apk" id="apk-link" hidden>Télécharger l'app Android (lecteur autonome)</a>
+  </main>
+
+  <!-- Remote -->
+  <div class="remote" id="remote" hidden>
+    <header class="remote__header">
+      <span class="remote__status" id="status">Connexion…</span>
+      <button class="remote__deconnecter-cta" id="disconnect" type="button" aria-label="Se déconnecter">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 17v-3H9v-4h7V7l5 5-5 5zM14 2a2 2 0 0 1 2 2v2h-2V4H5v16h9v-2h2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9z"/></svg>
+      </button>
+    </header>
+
+    <section class="now-playing" id="view-player">
+      <div class="now-playing__art-wrap">
+        <img class="now-playing__art" id="art" alt="" />
+      </div>
+      <div class="now-playing__meta">
+        <h2 class="now-playing__title" id="title">Rien en cours</h2>
+        <p class="now-playing__artist" id="artist"></p>
+      </div>
+
+      <div class="now-playing__progress">
+        <input class="now-playing__seek" id="seek" type="range" min="0" max="0" value="0" step="1" aria-label="Position" />
+        <div class="now-playing__times"><span id="elapsed">0:00</span><span id="duration">0:00</span></div>
+      </div>
+
+      <div class="now-playing__transport">
+        <button class="now-playing__shuffle-cta" id="shuffle" type="button" aria-label="Aléatoire">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        </button>
+        <button class="now-playing__precedent-cta" id="prev" type="button" aria-label="Précédent">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+        </button>
+        <button class="now-playing__lecture-cta" id="toggle" type="button" aria-label="Lecture/Pause">
+          <svg class="now-playing__icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="now-playing__icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <button class="now-playing__suivant-cta" id="next" type="button" aria-label="Suivant">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 18 8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+        <button class="now-playing__repeat-cta" id="repeat" type="button" aria-label="Répétition">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+          <span class="now-playing__repeat-one">1</span>
+        </button>
+      </div>
+
+      <div class="now-playing__extras">
+        <button class="now-playing__dislike-cta" id="dislike" type="button" aria-label="Je n'aime pas">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+        </button>
+        <div class="now-playing__volume">
+          <button class="now-playing__mute-cta" id="mute" type="button" aria-label="Couper le son">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+          </button>
+          <input class="now-playing__volume-range" id="volume" type="range" min="0" max="100" value="100" aria-label="Volume" />
+        </div>
+        <button class="now-playing__like-cta" id="like" type="button" aria-label="J'aime">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="queue" id="view-queue" hidden>
+      <div class="queue__toolbar">
+        <h2 class="queue__heading">File d'attente</h2>
+        <button class="queue__vider-cta" id="clear-queue" type="button">Vider</button>
+      </div>
+      <ol class="queue__list" id="queue-list"></ol>
+      <p class="queue__empty" id="queue-empty" hidden>La file est vide.</p>
+    </section>
+
+    <section class="search" id="view-search" hidden>
+      <form class="search__form" id="search-form" role="search">
+        <input class="search__input" id="search-input" type="search" placeholder="Titres, artistes, albums…" enterkeyhint="search" />
+      </form>
+      <ul class="search__list" id="search-list"></ul>
+      <p class="search__empty" id="search-empty" hidden>Aucun résultat.</p>
+    </section>
+
+    <nav class="tabbar" aria-label="Navigation">
+      <button class="tabbar__lecteur-cta tabbar__tab--active" data-view="player" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>Lecteur
+      </button>
+      <button class="tabbar__file-cta" data-view="queue" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18A3 3 0 1 0 19 17V8h3V6h-5z"/></svg>File
+      </button>
+      <button class="tabbar__recherche-cta" data-view="search" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>Recherche
+      </button>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
