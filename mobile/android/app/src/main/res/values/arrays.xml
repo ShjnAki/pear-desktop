@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="sb_categories_labels">
+    <item>Sponsor</item>
+    <item>Intro</item>
+    <item>Outro</item>
+    <item>Rappel d\'abonnement</item>
+    <item>Autopromotion</item>
+    <item>Passage non musical</item>
+  </string-array>
+  <string-array name="sb_categories_values">
+    <item>sponsor</item>
+    <item>intro</item>
+    <item>outro</item>
+    <item>interaction</item>
+    <item>selfpromo</item>
+    <item>music_offtopic</item>
+  </string-array>
+</resources>

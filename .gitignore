@@ -15,3 +15,7 @@ node_modules
 .vite-inspect
 
 .DS_Store
+
+# Mobile
+mobile/remote/pear-mobile.apk
+mobile/dist/
