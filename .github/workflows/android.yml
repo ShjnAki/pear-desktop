@@ -17,7 +17,8 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - uses: android-actions/setup-android@v3
+      # No third-party setup action: ubuntu-latest ships the Android SDK (ANDROID_HOME),
+      # and nothing outside actions/* runs next to the signing secrets.
 
       # Optional release signing: set ANDROID_KEYSTORE_BASE64 + ANDROID_KEYSTORE_PASSWORD secrets.
       # Without them the APK is signed with a throwaway debug key.
@@ -31,6 +32,9 @@ jobs:
           printf "storeFile=pear-release.jks\nstorePassword=%s\nkeyAlias=pear\nkeyPassword=%s\n" "$PASSWORD" "$PASSWORD" > keystore.properties
 
       - run: ./gradlew assembleRelease --console=plain
+      - name: Remove signing material
+        if: always()
+        run: rm -f pear-release.jks keystore.properties
       - uses: actions/upload-artifact@v4
         with:
           name: pear-mobile-apk
