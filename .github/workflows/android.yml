@@ -2,8 +2,14 @@ name: Android APK
 
 on:
   push:
+    branches: ['**']
+    # Push a `mobile-vX.Y.Z` tag to publish a versioned release (path filters don't apply to tags).
+    tags: ['mobile-v*']
     paths: ['mobile/android/**', '.github/workflows/android.yml']
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -35,7 +41,42 @@ jobs:
       - name: Remove signing material
         if: always()
         run: rm -f pear-release.jks keystore.properties
+      - run: cp app/build/outputs/apk/release/app-release.apk pear-mobile.apk
       - uses: actions/upload-artifact@v4
         with:
           name: pear-mobile-apk
-          path: mobile/android/app/build/outputs/apk/release/app-release.apk
+          path: mobile/android/pear-mobile.apk
+
+  # Separate job so the write token never sits next to the signing secrets.
+  # master -> refreshes the `mobile-latest` pre-release, so
+  #   https://github.com/<repo>/releases/download/mobile-latest/pear-mobile.apk is always the newest APK.
+  # mobile-v* tag -> versioned release.
+  release:
+    needs: build
+    if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/mobile-v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: android-release-${{ github.ref }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: pear-mobile-apk
+
+      - name: Publish mobile-latest pre-release
+        if: github.ref == 'refs/heads/master'
+        run: |
+          gh release delete mobile-latest --cleanup-tag --yes || true
+          gh release create mobile-latest pear-mobile.apk --target "$GITHUB_SHA" --prerelease \
+            --title "Pear mobile (latest)" \
+            --notes "Dernier APK compilé depuis master (${GITHUB_SHA::7})."
+
+      - name: Publish versioned release
+        if: startsWith(github.ref, 'refs/tags/mobile-v')
+        run: |
+          gh release create "$GITHUB_REF_NAME" pear-mobile.apk \
+            --title "Pear mobile ${GITHUB_REF_NAME#mobile-}" --generate-notes

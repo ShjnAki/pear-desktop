@@ -36,7 +36,14 @@ cd mobile/android
 Sans eux, l'APK est signé avec la clé de debug. **Sauvegarde le `.jks` et son mot de passe** :
 sans la même clé, Android refusera d'installer une mise à jour par-dessus l'ancienne version.
 
-La CI GitHub (`.github/workflows/android.yml`) compile aussi l'APK à chaque push sur `mobile/android/`.
+La CI GitHub (`.github/workflows/android.yml`) compile aussi l'APK à chaque push sur `mobile/android/`
+et le publie dans les Releases :
+
+- chaque build de `master` remplace la pré-release **`mobile-latest`** — lien direct, à ouvrir depuis le téléphone :
+  `https://github.com/ShjnAki/pear-desktop/releases/download/mobile-latest/pear-mobile.apk`
+- pousser un tag `mobile-vX.Y.Z` (ex. `git tag mobile-v1.0.0 && git push origin mobile-v1.0.0`)
+  crée une release versionnée.
+
 Pour qu'elle signe avec ta clé, ajoute ces secrets au dépôt :
 
 ```sh
